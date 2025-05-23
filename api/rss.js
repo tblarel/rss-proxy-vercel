@@ -6,16 +6,16 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(rssUrl);
-    if (!response.ok) throw new Error("Failed to fetch feed");
+    if (!response.ok) throw new Error("Failed to fetch RSS");
 
     const xml = await response.text();
-    const result = await xml2js.parseStringPromise(xml, { explicitArray: false });
+    const parsed = await xml2js.parseStringPromise(xml, { explicitArray: false });
 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Cache-Control', 'no-store');
-    res.status(200).json(result.rss.channel.item || []);
+    res.status(200).json(parsed.rss.channel.item || []);
   } catch (err) {
     console.error("RSS Proxy Error:", err);
-    res.status(500).json({ error: "Failed to load feed." });
+    res.status(500).json({ error: "Could not load feed." });
   }
 }
