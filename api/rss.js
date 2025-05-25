@@ -2,7 +2,10 @@ import fetch from 'node-fetch';
 import xml2js from 'xml2js';
 
 export default async function handler(req, res) {
-  const rssUrl = 'https://tblarel.github.io/inyourbones/feed.xml';
+  const isAll = req.query && (req.query.all !== undefined);
+  const rssUrl = isAll
+    ? 'https://tblarel.github.io/inyourbones/feed_all.xml'
+    : 'https://tblarel.github.io/inyourbones/feed.xml';
 
   try {
     const response = await fetch(rssUrl);
